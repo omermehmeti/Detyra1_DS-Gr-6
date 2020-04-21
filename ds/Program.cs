@@ -9,7 +9,7 @@ namespace ds
     {
         static void Main(string[] args)
         {
-                        if (args.Length == 0)
+            if (args.Length == 0)
             {
                 Class1.shfaq();
                 foursquare.encrypt("kosova", "k", "oma");
