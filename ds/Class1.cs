@@ -112,6 +112,15 @@ namespace ds
             }
             
         }
+         public static void shfaq()
+        {
+            Console.WriteLine("=======================================================================\n");
+            Console.WriteLine("Operacioni case: case (alternating,inverse,capitalize,upper,lower) teksti");
+            Console.WriteLine("Operacioni vigener: vigenere (encrypt,decrypt) tekst key");
+            Console.WriteLine("Operacioni foursquare: foursquare (encrypt,decrypt) tekst key1 key2");
+            
+            Console.WriteLine("=========================================================================");
+        }
        
        
     }
