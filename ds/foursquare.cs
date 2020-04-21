@@ -7,73 +7,12 @@ namespace ds
 {
     class foursquare
     {
-        public static char[,] square;
-       public static char[,] squarek11;
-        public static char[,] squarek12;
-       public static string[] bigram;
-       public static  StringBuilder encrypted = new StringBuilder();
-       //metoda square1 is used to form a normal Alphabetical square
-       public static char[,] square1()
-        {
-            char[,] katrori = { };
-            int count = 0; 
-            for(int i = 0; i < 5; i++)
-            {
-                for(int j = 0; j < 5; j++)
-                {
-                    if (count == 9) count++;
-                    katrori[i,j] = (char)('A' + count);
-                    
-                    count++;
-                }
-            }
-            return katrori;
-        }
+        
         // method squarek1 is used to form a square with 
         public static char[,] squarek1(string key1, char[,] c1)
         {
             // key1.
-            char[,] c2 = { };
-            StringBuilder key11 = new StringBuilder(doubles(key1));
-           // StringBuilder sqr = new StringBuilder()
-            int count = 0;
-            int count2 = 0;
             
-                for(int i = 0; i < 5; i++)
-                {
-                    for(int j = 0; j < 5; j++)
-                    {
-                        if (count < key11.Length)
-                        {
-                            c1[i, j] = key11[count];
-                            c2[i, j] = c1[i, j];
-
-                            count++;
-                        }
-                        else 
-                        {
-                            
-                            
-                            if (has1(c1[i, j] = (char)('A' + count2),c1))
-                            {
-                            c1[i, j] = rchar(count2,c1);
-                            c2[i, j] = c1[i, j];
-                            }
-                            else
-                            {
-                            c1[i, j] = (char)('A' + count2);
-                            c2[i, j] = c1[i, j];
-
-
-                        }
-                    }
-                         
-                    }
-                count++;
-                }
-            return c2;
-
-        }
         // this method eturn right character to put in matrix (avoiding putting the samech)
         public static char rchar(int k,char[,] c1)
         {
