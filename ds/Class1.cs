@@ -1,11 +1,80 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Security.Cryptography;
+
+using System.Xml;
+using System.IO;
 
 namespace ds
 {
     class Class1
     {
+         public static void Createuser(string user)
+        {
+            /*
+            string path = "C:\\keys\\"+user+".xml";
+            XmlTextWriter writer = new XmlTextWriter(path, null);*/
+            //stream to save the keys
+            FileStream fs = null;
+            StreamWriter sw = null;
+
+            //create RSA provider
+            RSACryptoServiceProvider rsa = new RSACryptoServiceProvider(2048);
+            try
+            {
+                String privateKeyPath= "C:\\keys\\"+user+".xml";
+                //save private key
+                fs = new FileStream(privateKeyPath, FileMode.Create, FileAccess.Write);
+                sw = new StreamWriter(fs);
+                sw.Write(rsa.ToXmlString(true));
+                sw.Flush();
+            }
+            finally
+            {
+                if (sw != null) sw.Close();
+                if (fs != null) fs.Close();
+                Console.WriteLine("Eshte krijuar celsesi privat" +
+                    "C:\\keys\\" + user + ".xml");
+            }
+            try
+            {
+                string publicKeyPath = "C:\\keys\\" + user + ".pub.xml";
+                //save public key
+                fs = new FileStream(publicKeyPath, FileMode.Create, FileAccess.Write);
+                sw = new StreamWriter(fs);
+                sw.Write(rsa.ToXmlString(false));
+                sw.Flush();
+            }
+            finally
+            {
+                if (sw != null) sw.Close();
+                if (fs != null) fs.Close();
+                Console.WriteLine("Eshte krijuar celsesi public" +
+                    "C:\\keys\\" + user + ".pub.xml");
+            }
+            rsa.Clear();
+        }
+        public static void Deleteuser(string user)
+        {
+            string path ="C:\\keys\\" + user + ".xml";
+            string path1 = "C:\\keys\\" + user + ".pub.xml";
+
+            if (File.Exists(path) && File.Exists(path1))
+            {
+                File.Delete(path);
+                Console.WriteLine("Eshte larguar celsesi privat" + path);
+                File.Delete(path1);
+                Console.WriteLine("Eshte larguar celsesi public" + path1);
+            }
+            else if (!File.Exists(path) && File.Exists(path1))
+            {
+                File.Delete(path1);
+                Console.WriteLine("Eshte larguar celsesi public" + path1);
+            }
+            else
+                Console.WriteLine("celesi nuk ekziston");
+        }
         public static void Kontrollo(string a,string b)
         {
             int ln = b.Length;
