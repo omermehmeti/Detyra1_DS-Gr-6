@@ -11,9 +11,9 @@ namespace ds
         {
             if (args.Length == 0)
             {
-                Class1.shfaq();
+                Class1.shfaq();/*
                 foursquare.encrypt("kosova", "k", "oma");
-                foursquare.Decrypt("hpltvo", "k", "oma");
+                foursquare.Decrypt("hpltvo", "k", "oma");*/
             }
             else
             {
@@ -55,6 +55,18 @@ namespace ds
                             Class1.shfaq();
                         }
                         break;
+                    case "create-user":
+                        string u = "C:\\keys\\" + args[1] + ".xml";
+                        if (File.Exists(u)){
+                            Console.WriteLine("Celsesi " + args[1] + "ekziston paraprakisht");
+                        }
+                        else
+                            Class1.Createuser(args[1]);
+                        break;
+                    case "delete-user":
+                        Class1.Deleteuser(args[1]);
+                        break;
+                        
                     default:
                         Console.WriteLine("operacioni qe keni kerkuar nuk mund te mundesohet");
                         Class1.shfaq();
