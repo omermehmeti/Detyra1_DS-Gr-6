@@ -1,19 +1,24 @@
-﻿using System;
+using System;
 using System.Globalization;
+using System.Security.Cryptography;
 using System.Text;
+using System.Xml;
+using System.IO;
+using System.Text.RegularExpressions;
 
 
 namespace ds
 {
     class Program
     {
-        static void Main(string[] args)
+        static int Main(string[] args)
         {
             if (args.Length == 0)
             {
                 Class1.shfaq();/*
                 foursquare.encrypt("kosova", "k", "oma");
                 foursquare.Decrypt("hpltvo", "k", "oma");*/
+                return 0;
             }
             else
             {
@@ -23,53 +28,100 @@ namespace ds
                 {
                     case "case":
                         Class1.Kontrollo(args[1], args[2]);
+                        return 0;
                         break;
                     case "vigenere":
                         if (args[1] == "encrypt")
                         {
                           Console.WriteLine(program2.Encrypt(args[2], args[3]));
+                            return 0;
                         }
                         else if (args[1] == "decrypt")
                         {
                           Console.WriteLine(program2.Decrypt(args[2], args[3]));
+                            return 0;
                         }
                         else
                         {
                             Console.WriteLine("keni shtypur dicka gabim");
                             Class1.shfaq();
+                            return 1;
                         }
                         break;
                     case "foursquare":
                         if (args[1] == "encrypt")
                         {
                             foursquare.encrypt(args[2],args[3],args[4]);
+                            return 0;
                         }
                         else if (args[1] == "decrypt")
                         {
                              foursquare.Decrypt(args[2],args[3],args[4]);
+                            return 0;
                         }
                         else
                         {
                             Console.WriteLine("keni shtypur dicka gabim");
                             
                             Class1.shfaq();
+                            return 1;
+                            
                         }
                         break;
-                    case "create-user":
+                     case "create-user":
+                        Regex obj = new Regex("^[a-zA-Z0-9/_]*$");
+                       // string s = Console.ReadLine();
                         string u = "C:\\keys\\" + args[1] + ".xml";
-                        if (File.Exists(u)){
-                            Console.WriteLine("Celsesi " + args[1] + "ekziston paraprakisht");
+                        if (!obj.IsMatch(args[1])){
+                            Console.WriteLine("Useri  nuk mund te permbaje disa nga karakteret" +
+                                "qe keni perdorur");
+                            return 1;
+                            
                         }
+                        else if(File.Exists(u))
+                        {
+                            Console.WriteLine("Celesi " + args[1] + " ekziston paraprakisht");
+                            return 1;
+                        }    
                         else
-                            Class1.Createuser(args[1]);
+                        {
+                             Class1.Createuser(args[1]);
+                                return 0;
+                        }
                         break;
                     case "delete-user":
                         Class1.Deleteuser(args[1]);
+                        return 0;
+                        break;
+                    case "export-key":
+                        if (args[1] == "public")
+                        {
+                            Class1.exportKey("public", args[2], args[3]);
+                        }
+                        else if (args[1] == "private")
+                        {
+                            Class1.exportKey("private", args[2], args[3]);
+                        }
+                        else
+                            Console.WriteLine("operacioni qe kerkuat nuk mund te mundesohet");
+                        break;
+                    case "import-key":
+                        Class1.importKey(args[1], args[2]);
+                        break;
+                    case "write-message":
+                       // Class1.writeMessage(args[1], args[2], args[3]);
+                        Console.Writeline("nuk eshte implementuar ende kjo pjes");
+                        return 0;
+                        break;
+                    case "read-message":
+                        Console.Writeline("//");
+                        return 0;
                         break;
                         
                     default:
                         Console.WriteLine("operacioni qe keni kerkuar nuk mund te mundesohet");
                         Class1.shfaq();
+                        return 1;
                         break;
                 }
                 
