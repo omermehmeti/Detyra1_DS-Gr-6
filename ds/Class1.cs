@@ -14,51 +14,229 @@ namespace ds
 {
     class Class1
     {
+         
+        public static byte[] Desdekriptim(byte[] decryptedRSA,byte [] bytes1,byte [] dekodimiDes)
+        {
+            DESCryptoServiceProvider FjalaDES = new DESCryptoServiceProvider();
+            FjalaDES.Mode = CipherMode.CBC;
+            FjalaDES.Padding = PaddingMode.PKCS7;
+
+
+            FjalaDES.Key = decryptedRSA;
+            FjalaDES.IV = bytes1;
+            
+            MemoryStream ms = new MemoryStream();
+
+            CryptoStream cs = new CryptoStream(ms,
+                                FjalaDES.CreateDecryptor(),
+                                CryptoStreamMode.Write);
+            cs.Write(dekodimiDes, 0, dekodimiDes.Length);
+            cs.FlushFinalBlock();
+            // cs.Close();
+
+            byte[] plainCiphertexti = ms.ToArray();
+            return plainCiphertexti;
+
+        }
+        public static string Dekriptimi(string message)
+        {
+            string[] words = message.Split('.');
+            var bytes = Convert.FromBase64String(words[0]);
+            string user = Encoding.UTF8.GetString(bytes);
+            Console.WriteLine(user);
+            byte[] bytes1 = Convert.FromBase64String(words[1]);
+            //string IV = Encoding.UTF8.GetString(bytes1);
+            // Console.WriteLine(IV);
+            // bytes1 = Formovargun(IV);
+            string path = "C:\\keys\\" + user + ".xml";
+            Console.WriteLine(path);
+
+            if (!File.Exists(path))
+            {
+                string s = "Celesi " + user + " nuk ekziston";
+               // Console.WriteLine("Celesi " + user + " nuk ekziston");
+                return s;
+            }
+            else
+            {
+                RSACryptoServiceProvider rsaPublic = new RSACryptoServiceProvider();
+
+                StreamReader sr = File.OpenText(path);
+                string rsaxml = sr.ReadToEnd();
+                sr.Close();
+                rsaPublic.FromXmlString(rsaxml);
+                byte[] dekodimi = Convert.FromBase64String(words[2]);
+                byte[] decryptedRSA = rsaPublic.Decrypt(dekodimi, false);
+                byte[] dekodimiDes = Convert.FromBase64String(words[3]);
+                
+                string mesazhi = Encoding.UTF8.GetString(Desdekriptim(decryptedRSA,bytes1,dekodimiDes));
+                Console.WriteLine("Marresi: "+user);
+                return mesazhi;
+
+
+
+
+
+            }
+
+        }
+        public static byte[] GenerateRandomByteArray(int size)
+        {
+            var random = new Random();
+            byte[] byteArray = new byte[size];
+            random.NextBytes(byteArray);
+            return byteArray;
+        }
+
+        public static byte[] GenerateIv()
+        {
+            byte[] IV = GenerateRandomByteArray(8);
+            return IV;
+        }
+
+        public static byte[] GenerateKey()
+        {
+            byte[] key = GenerateRandomByteArray(8);
+            return key;
+        }
+        public static byte[] Formovargun(string fjala)
+        {
+            byte[] vargu = Encoding.UTF8.GetBytes(fjala);
+            return vargu;
+        }
+        public static string Enkriptimi(string name,string message)
+        {
+            string s = "C:\\keys\\" + name + ".pub.xml";
+            byte[] bytePlaintext =
+             Encoding.UTF8.GetBytes(message);
+            
+            RSACryptoServiceProvider rsaPublic = new RSACryptoServiceProvider();
+
+            StreamReader sr = File.OpenText(s);
+            string rsaxml = sr.ReadToEnd();
+            sr.Close();
+            rsaPublic.FromXmlString(rsaxml);
+            DESCryptoServiceProvider FjalaDES =
+           new DESCryptoServiceProvider();
+            byte[] keyRandom = GenerateKey();
+            byte[] keyIV = GenerateIv();
+            FjalaDES.Key = keyRandom;
+            FjalaDES.IV = keyIV;
+            FjalaDES.Mode = CipherMode.CBC;
+            FjalaDES.Padding = PaddingMode.PKCS7;
+
+
+            // FjalaDES.Key = Encoding.UTF8.GetBytes("12345678");
+            // FjalaDES.IV = Encoding.UTF8.GetBytes("12345678");
+            MemoryStream ms = new MemoryStream();
+
+            CryptoStream cs = new CryptoStream(ms,
+                                FjalaDES.CreateEncryptor(),
+                                CryptoStreamMode.Write);
+            cs.Write(bytePlaintext, 0, bytePlaintext.Length);
+            cs.FlushFinalBlock();
+
+            cs.Close();
+
+            byte[] byteCiphertexti = ms.ToArray();
+
+
+
+            // mesazhi i koduar nga celsi des
+            string ciphertexti = Convert.ToBase64String(byteCiphertexti);
+            // celsi des i koduar permes celsit rsa
+            byte[] encryptedRSA = rsaPublic.Encrypt(keyRandom, false);
+            string ciphertexti1 = Convert.ToBase64String(encryptedRSA);
+            //Kodimi i emrit te celsit
+            byte[] emriVarg = Formovargun(name);
+            string ciphertexti2 = Convert.ToBase64String(emriVarg);
+            //kodimi i iv
+            string ciphertexti3 = Convert.ToBase64String(FjalaDES.IV);
+           
+
+            string total = ciphertexti2 + "." + ciphertexti3 + "." + ciphertexti1 +
+                "." + ciphertexti;
+
+            // Console.WriteLine(ciphertexti);
+            return total;
+
+        }
+        public static void shfaq()
+        {
+            Console.WriteLine("========================================================================\n");
+            Console.WriteLine("Operacioni case: case (alternating,inverse,capitalize,upper,lower) teksti");
+            Console.WriteLine("Operacioni vigener: vigenere (encrypt,decrypt) tekst key");
+            Console.WriteLine("Operacioni foursquare: foursquare (encrypt,decrypt) tekst key1 key2");
+            Console.WriteLine("Operacioni create-user: create-user user");
+            Console.WriteLine("Operacioni delete-user: delete-user user");
+            Console.WriteLine("Operacioni export-key: export-key (private,public) name path");
+            Console.WriteLine("Operacioni import-key: import-key  name  path ");
+            Console.WriteLine("Operacioni write-message: write-message: name message file");
+            Console.WriteLine("Operacioni read -message: read-message ");
+            Console.WriteLine("Operacioni log-in: user pss");
+            Console.WriteLine("Operacioni ");
+            Console.WriteLine("");
+            
+            Console.WriteLine("=========================================================================");
+        }
         public static void writeMessage(string name,string message,string file)
         {
             if (!File.Exists("C:\\keys\\" +name + ".pub.xml"))
             {
-                Console.WriteLine("celesi " + name + "nuk ekziston");
+                Console.WriteLine("celesi publik " + name + " nuk ekziston");
             }
-            else if (file == null)
+            else if (file == "")
 
             {
-                string s = "C:\\keys\\" + name + ".pub.xml";
-                byte[] bytePlaintext =
-                 Encoding.UTF8.GetBytes(message);
-                XmlDocument doc = new XmlDocument();
-                doc.Load(s);
-                string k = doc.ToString();
-                RSACryptoServiceProvider rsaPublic = new RSACryptoServiceProvider();
                 
-                
-                DESCryptoServiceProvider FjalaDES =
-                new DESCryptoServiceProvider();
-                FjalaDES.Key = Encoding.UTF8.GetBytes("12345678");
-                FjalaDES.IV = Encoding.UTF8.GetBytes("12345678");
-                MemoryStream ms = new MemoryStream();
-
-                CryptoStream cs = new CryptoStream(ms,
-                                    FjalaDES.CreateEncryptor(),
-                                    CryptoStreamMode.Write);
-                cs.Write(bytePlaintext, 0, bytePlaintext.Length);
-                cs.Close();
-
-                byte[] byteCiphertexti = ms.ToArray();
-                byte[] encryptedRSA = rsaPublic.Encrypt(byteCiphertexti, false);
-               // string EncryptedResult = Encoding.Default.GetString(encryptedRSA);
-
-                string ciphertexti=Convert.ToBase64String(encryptedRSA);
+                string ciphertexti = Enkriptimi(name, message);
                 Console.WriteLine(ciphertexti);
+                
+
+            }
+            else if (!File.Exists(file))
+            {
+                Console.WriteLine("Fajlli qe keni dhene nuk ekziston");
+            }
+            else
+            {
+                string ciphertexti = Enkriptimi(name, message);
+
+                System.IO.File.WriteAllText(file, ciphertexti);
+                Console.WriteLine("mesazhi eshte ruajtur ne fajjllin " + file);
+
+
+
+            }
+        }
+        public static Boolean Validatemessage(string message)
+        {
+            string[] words = message.Split('.');
+            if (words.Length == 4)
+                return true;
+            return false;
+        }
+        public static void readMessage(string message )
+        {
+            if (Validatemessage(message)&&!File.Exists(message))
+            {
+                Console.WriteLine("Mesazhi "+Dekriptimi(message));
+                
+
+
+
+            }
+            else if (File.Exists(message))
+            {
+                Console.WriteLine("operacionet per leximin e fajllave");
+                string readText = File.ReadAllText(message);
+                Console.WriteLine("Mesazhi "+Dekriptimi(readText));
 
             }
             else
             {
-
+                Console.WriteLine("Mesazhi nuk eshte valid");
             }
-        }
-        public static void readMessage(string message )
-        {
 
         }
         public static void exportKey(string type,string name,string path)
@@ -72,7 +250,7 @@ namespace ds
                     Console.WriteLine("celesi nuk ekziston");
 
                 }
-                else if (path == null)
+                else if (path == "")
                 {
                     XElement file = XElement.Load(@path1);
                     Console.WriteLine(file);
@@ -99,7 +277,7 @@ namespace ds
                     Console.WriteLine("celesi nuk ekziston");
 
                 }
-                else if (path == null)
+                else if (path == "")
                 {
                     XElement file = XElement.Load(@path1);
                     Console.WriteLine(file);
@@ -165,7 +343,7 @@ namespace ds
             else
                 Console.WriteLine("Fajlli i dhene nuk eshte fajll valid");
         }
-         public static void Createuser(string user)
+        public static void Createuser(string user)
         {
             /*
             string path = "C:\\keys\\"+user+".xml";
@@ -189,7 +367,7 @@ namespace ds
             {
                 if (sw != null) sw.Close();
                 if (fs != null) fs.Close();
-                Console.WriteLine("Eshte krijuar celsesi privat" +
+                Console.WriteLine("Eshte krijuar celsesi privat " +
                     "C:\\keys\\" + user + ".xml");
             }
             try
@@ -205,7 +383,7 @@ namespace ds
             {
                 if (sw != null) sw.Close();
                 if (fs != null) fs.Close();
-                Console.WriteLine("Eshte krijuar celsesi public" +
+                Console.WriteLine("Eshte krijuar celsesi public " +
                     "C:\\keys\\" + user + ".pub.xml");
             }
             rsa.Clear();
@@ -225,7 +403,7 @@ namespace ds
             else if (!File.Exists(path) && File.Exists(path1))
             {
                 File.Delete(path1);
-                Console.WriteLine("Eshte larguar celsesi public" + path1);
+                Console.WriteLine("Eshte larguar celesi public" + path1);
             }
             else
                 Console.WriteLine("celesi nuk ekziston");
@@ -336,22 +514,5 @@ namespace ds
             }
             
         }
-         public static void shfaq()
-        {
-            Console.WriteLine("=======================================================================\n");
-            Console.WriteLine("Operacioni case: case (alternating,inverse,capitalize,upper,lower) teksti");
-            Console.WriteLine("Operacioni vigener: vigenere (encrypt,decrypt) tekst key");
-            Console.WriteLine("Operacioni foursquare: foursquare (encrypt,decrypt) tekst key1 key2");
-            Console.WriteLine("Operacioni create-user: create-user user");
-            Console.WriteLine("Operacioni delete-user: delete-user user");
-            Console.WriteLine("Operacioni export-key: export-key (private,public) name path");
-            Console.WriteLine("Operacioni import-key: import-key  name  path ");
-            Console.WriteLine("Operacioni write-message: write-message: name message file");
-            Console.WriteLine("Operacioni read -message: read-message ");
-            
-            Console.WriteLine("=========================================================================");
-        }
-       
-       
     }
 }
