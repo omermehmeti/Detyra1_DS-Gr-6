@@ -12,7 +12,7 @@ namespace ds
         {
 
             Chilkat.PrivateKey privKey = new Chilkat.PrivateKey();
-            bool success = privKey.LoadEncryptedPemFile("keys\\" + user + ".pem", "passwd");
+            bool success = privKey.LoadEncryptedPemFile("C:\\Users\\Lenovo\\Desktop\\Detyra1_DS-Gr-6-master\\ds\\bin\\Debug\\netcoreapp3.0\\keys\\" + user + ".pem", "passwd");
             if (!success)
             {
                 return "Nuk ekziston Celsi ose nuk mund te hapet";
@@ -66,7 +66,7 @@ namespace ds
 
 
             Chilkat.PublicKey pubKey = new Chilkat.PublicKey();
-            bool success = pubKey.LoadFromFile("keys\\" + 
+            bool success = pubKey.LoadFromFile("C:\\Users\\Lenovo\\Desktop\\Detyra1_DS-Gr-6-master\\ds\\bin\\Debug\\netcoreapp3.0\\keys\\" + 
                 GetTuser(token,false)+ ".pub.pem");
             Console.WriteLine(GetTuser(token, false));
             bool sigVerified = jwt.VerifyJwtPk(token, pubKey);
