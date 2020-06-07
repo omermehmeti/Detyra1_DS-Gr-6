@@ -19,7 +19,7 @@ namespace ds
                 Chilkat.PrivateKey pkey = new Chilkat.PrivateKey();
 
                 // Load the private key from an RSA PEM file:
-                bool success = pkey.LoadPemFile("keys\\" + user + ".pem");
+                bool success = pkey.LoadPemFile("C:\\Users\\Lenovo\\Desktop\\Detyra1_DS-Gr-6-master\\ds\\bin\\Debug\\netcoreapp3.0\\keys\\" + user + ".pem");
                 string pkeyXml;
                 // Get the private key in XML format:
                 pkeyXml = pkey.GetXml();
@@ -46,7 +46,7 @@ namespace ds
                 Chilkat.PublicKey pukey = new Chilkat.PublicKey();
 
                 // Load the private key from an RSA PEM file:
-                bool success = pukey.LoadOpenSslPemFile("keys\\" + user + ".pub.pem");
+                bool success = pukey.LoadOpenSslPemFile("C:\\Users\\Lenovo\\Desktop\\Detyra1_DS-Gr-6-master\\ds\\bin\\Debug\\netcoreapp3.0\\keys\\" + user + ".pub.pem");
                 if (!success)
                 {
                     Console.WriteLine("Celsi publik i perdoruesit" + user + "nuk gjendet");
