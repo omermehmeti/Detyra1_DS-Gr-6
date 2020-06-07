@@ -1,0 +1,2 @@
+Per te punuar ne rregull programi sigurohuni qe ta keni krijuar nje folder ne diskun c me emrin keys.C:\keys
+Dhe ne komanden write-message sigurohuni qe fajlli ne te cilin deshironi qe mesazhi i enkriptuar te ruhet te ekzistoj.
