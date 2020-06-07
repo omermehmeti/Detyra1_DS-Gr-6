@@ -16,6 +16,7 @@ namespace ds
 {
     class Fshtese
     {
+        
 
         public static byte[] Desdekriptim(byte[] decryptedRSA, byte[] bytes1, byte[] dekodimiDes)
         {
@@ -50,7 +51,7 @@ namespace ds
             //string IV = Encoding.UTF8.GetString(bytes1);
             // Console.WriteLine(IV);
             // bytes1 = Formovargun(IV);
-            string path = "keys\\" + user + ".pem";
+            string path = "C:\\Users\\Lenovo\\Desktop\\Detyra1_DS-Gr-6-master\\ds\\bin\\Debug\\netcoreapp3.0\\keys\\" + user + ".pem";
             //Console.WriteLine(path);
 
             if (!File.Exists(path))
@@ -131,7 +132,7 @@ namespace ds
         }
         public static string Enkriptimi(string name, string message,string user)
         {
-            string s = "keys\\" + name + ".pub.pem";
+            string s = "C:\\Users\\Lenovo\\Desktop\\Detyra1_DS-Gr-6-master\\ds\\bin\\Debug\\netcoreapp3.0\\keys\\" + name + ".pub.pem";
             byte[] bytePlaintext =
              Encoding.UTF8.GetBytes(message);
 
@@ -218,7 +219,7 @@ namespace ds
                 Console.WriteLine("Tokeni nuk eshte i duhur ose ka skaduar");
                 
             }
-            else if (!File.Exists("keys\\" + name + ".pub.pem")&&tokenV)
+            else if (!File.Exists("C:\\Users\\Lenovo\\Desktop\\Detyra1_DS-Gr-6-master\\ds\\bin\\Debug\\netcoreapp3.0\\keys\\" + name + ".pub.pem")&&tokenV)
             {
                 Console.WriteLine("celesi publik " + name + " nuk ekziston");
             }
@@ -293,8 +294,8 @@ namespace ds
         }
         public static void exportKey(string type, string name, string path)
         {
-            string path1 = "keys\\" + name + ".pem";
-            string path2 = "keys\\" + name + ".pub.pem";
+            string path1 = "C:\\Users\\Lenovo\\Desktop\\Detyra1_DS-Gr-6-master\\ds\\bin\\Debug\\netcoreapp3.0\\keys\\" + name + ".pem";
+            string path2 = "C:\\Users\\Lenovo\\Desktop\\Detyra1_DS-Gr-6-master\\ds\\bin\\Debug\\netcoreapp3.0\\keys\\" + name + ".pub.pem";
             if ((type == "private"))
             {
                 if (!File.Exists(path1))
@@ -381,7 +382,7 @@ namespace ds
         {
             Regex obj = new Regex("^(http://|https://)");
             Regex obj1 = new Regex("(.xml|.pub.xml)$");
-            if (File.Exists("C:\\keys\\" + name + ".xml") | File.Exists("C:\\keys\\" + name + ".pub.xml"))
+            if (File.Exists("C:\\Users\\Lenovo\\Desktop\\Detyra1_DS-Gr-6-master\\ds\\bin\\Debug\\netcoreapp3.0\\keys\\" + name + ".pem") | File.Exists("C:\\keys\\" + name + ".pub.xml"))
             {
                 Console.WriteLine("celesi " + name + "ekziston paraprakisht");
             }
@@ -455,12 +456,12 @@ namespace ds
             // Save the private key in PEM format:
             Chilkat.PrivateKey privKey = new Chilkat.PrivateKey();
             success = privKey.LoadXml(privateKeyXml);
-            success = privKey.SaveRsaPemFile("keys\\" + user + ".pem");
+            success = privKey.SaveRsaPemFile("C:\\Users\\Lenovo\\Desktop\\Detyra1_DS-Gr-6-master\\ds\\bin\\Debug\\netcoreapp3.0\\keys\\" + user + ".pem");
             Console.WriteLine("Eshte krijuar qelesi privat " + "keys\\" + user + ".pem");
             // Save the public key in PEM format:
             Chilkat.PublicKey pubKey = new Chilkat.PublicKey();
             success = pubKey.LoadXml(publicKeyXml);
-            success = pubKey.SaveOpenSslPemFile("keys\\" + user + ".pub.pem");
+            success = pubKey.SaveOpenSslPemFile("C:\\Users\\Lenovo\\Desktop\\Detyra1_DS-Gr-6-master\\ds\\bin\\Debug\\netcoreapp3.0\\keys\\" + user + ".pub.pem");
             Console.WriteLine("Eshte krijuar qelesi public " + "keys\\" + user + ".pub.pem");
 
 
@@ -469,8 +470,8 @@ namespace ds
         public static void Deleteuser(string user)
         {
             bool verify = Connectimimedb.verify(user);
-            string path ="keys\\" + user + ".pem";
-            string path1 = "keys\\" + user + ".pub.pem";
+            string path ="C:\\Users\\Lenovo\\Desktop\\Detyra1_DS-Gr-6-master\\ds\\bin\\Debug\\netcoreapp3.0\\keys\\" + user + ".pem";
+            string path1 = "C:\\Users\\Lenovo\\Desktop\\Detyra1_DS-Gr-6-master\\ds\\bin\\Debug\\netcoreapp3.0\\keys\\" + user + ".pub.pem";
             
 
             if (File.Exists(path) && File.Exists(path1))
